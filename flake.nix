@@ -19,6 +19,11 @@
     moduleLists = {
       argon = [
         disko.nixosModules.disko
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            pkgs.ripgrep
+          ];
+        })
       ];
     };
 
@@ -31,9 +36,9 @@
     };
 
     packages.x86_64-linux = {
-      iso = nixos-generators.nixosGenerate {
+      isoInstaller = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
-        format = "iso";
+        format = "install-iso";
         modules = self.moduleLists.argon;
       };
       proxmox-lxc = nixos-generators.nixosGenerate {
