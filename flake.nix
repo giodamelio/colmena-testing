@@ -61,11 +61,39 @@
 
       # Minimal testing machine
       argon = [
+        # Disk partitions
+        # Use lib.mkForce so that the disko config overrides the
+        # definitions from nixos-generators
         disko.nixosModules.disko
-        disko.lib.config (import ./disks.nix {})
+        (disko.lib.config (import ./disks/argon.nix {}))
+
         ({ pkgs, ... }: {
+          # Enable ssh
+          systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
+
+          # Passwordless sudo
+          security.sudo.wheelNeedsPassword = false;
+
+          # Add all wheel group users to trusted users
+          nix.settings.trusted-users = [ "root" "@wheel" ];
+
+          # Create a user
+          users.users.server = {
+            isNormalUser = true;
+            extraGroups = [ "wheel" ];
+            openssh.authorizedKeys.keys = [
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAZF+j6HGldFqQdp+CaPaYKGMsFpUsk49jqhb7VtdUvn giodamelio@cadmium"
+            ];
+          };
+
+          # Some random packages
           environment.systemPackages = [
+            pkgs.vim
+            pkgs.curl
+            pkgs.wget
+            pkgs.git
             pkgs.ripgrep
+            pkgs.fd
           ];
         })
       ];
