@@ -68,8 +68,20 @@
         (disko.lib.config (import ./disks/argon.nix {}))
 
         ({ pkgs, ... }: {
+          # Bootloader stuff
+          boot.loader.grup = {
+            enable = true;
+            version = 2;
+            efiSupport = true;
+            device = "/dev/sda";
+          };
+
+          # System version
+          system.stateVersion = "23.05"
+
           # Enable ssh
-          systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
+          services.openssh.enable = true;
+          # systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
 
           # Passwordless sudo
           security.sudo.wheelNeedsPassword = false;
