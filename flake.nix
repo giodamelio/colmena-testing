@@ -77,7 +77,7 @@
           };
 
           # System version
-          system.stateVersion = "23.05"
+          system.stateVersion = "23.05";
 
           # Enable ssh
           services.openssh.enable = true;
