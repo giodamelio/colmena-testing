@@ -31,7 +31,6 @@
 
             # Partition management
             disko.packages.x86_64-linux.disko
-
           ] ++
 
           # Scripts for each disk layout in disks/
@@ -52,7 +51,19 @@
                   (disko.lib.mount (import ./disks/${file} {}))
                 )
               ]
-            ) files);
+            ) files) ++
+
+          # Quick script to quickly download my dotfiles
+          # TODO: update this when we actually put my real system here
+          [
+            (pkgs.writeScriptBin
+              "installer-clone-dotfiles"
+              ''
+              git clone https://github.com/giodamelio/colmena-testing
+              cd colmena-testing/
+              ''
+            )
+          ];
 
           # Enable flakes
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
