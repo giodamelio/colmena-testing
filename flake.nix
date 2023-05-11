@@ -69,7 +69,7 @@
 
         ({ pkgs, ... }: {
           # Bootloader stuff
-          boot.loader.grup = {
+          boot.loader.grub = {
             enable = true;
             version = 2;
             efiSupport = true;
