@@ -65,6 +65,16 @@
             )
           ];
 
+          # Add all the SSH public keys from my Github to the installer
+          users.users.nixos = {
+            openssh.authorizedKeys.keyFiles = [
+              (builtins.fetchurl {
+                url = "https://github.com/giodamelio.keys";
+                sha256 = "1waqkfprkchajc8p4i67b4rf9pgxqcmlh4fhgdk3wwqdlc71qq91";
+              })
+            ];
+          };
+
           # Enable flakes
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
         })
