@@ -54,17 +54,6 @@
       # Minimal testing machine
       argon = [
         ({ pkgs, ... }: {
-          # Bootloader stuff
-          boot.loader.grub = {
-            enable = true;
-            version = 2;
-            efiSupport = true;
-            device = "/dev/sda";
-          };
-
-          # System version
-          system.stateVersion = "23.05";
-
           # Enable ssh
           services.openssh.enable = true;
           # systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
