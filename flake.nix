@@ -10,6 +10,7 @@
 
   outputs = { self, nixpkgs, nixos-generators, deploy-rs } @ inputs: let
     lib = nixpkgs.lib;
+    pkgs = nixpkgs.legacyPackages.x86_64-linux;
   in {
     moduleLists = {
       # A set of package to have in the installer iso
@@ -122,6 +123,8 @@
         format = "install-iso";
         modules = self.moduleLists.installer;
       };
+
+      installer = pkgs.callPackage ./packages/installer.nix { };
     };
   };
 }
