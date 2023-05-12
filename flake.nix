@@ -5,9 +5,10 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs.url = "github:serokell/deploy-rs";
   };
 
-  outputs = { self, nixpkgs, nixos-generators } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators, deploy-rs } @ inputs: let
     lib = nixpkgs.lib;
   in {
     moduleLists = {
@@ -53,6 +54,8 @@
 
       # Minimal testing machine
       argon = [
+        ./hosts/argon/configuration.nix
+
         ({ pkgs, ... }: {
           # Enable ssh
           services.openssh.enable = true;
@@ -63,6 +66,9 @@
 
           # Add all wheel group users to trusted users
           nix.settings.trusted-users = [ "root" "@wheel" ];
+
+          # Define your hostname.
+          networking.hostName = "argon"; 
 
           # Create a user
           users.users.server = {
@@ -91,6 +97,22 @@
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = self.moduleLists.argon;
+      };
+    };
+
+    deploy = {
+      nodes = {
+        argon = {
+          hostname = "10.0.128.157";
+          user = "root";
+          sshUser = "server";
+
+          profiles = {
+            system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.argon;
+            };
+          };
+        };
       };
     };
 
