@@ -1,19 +1,13 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    disko = {
-      url = "github:nix-community/disko";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, disko, nixos-generators } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators } @ inputs: let
     lib = nixpkgs.lib;
   in {
     moduleLists = {
@@ -28,30 +22,7 @@
             pkgs.git
             pkgs.ripgrep
             pkgs.fd
-
-            # Partition management
-            disko.packages.x86_64-linux.disko
           ] ++
-
-          # Scripts for each disk layout in disks/
-          (let
-            filesWithTypes = builtins.readDir ./disks;
-            files = lib.mapAttrsToList (name: _type: name) filesWithTypes;
-          in builtins.concatMap
-            (file:
-              let
-                nameWithoutNixSuffix = lib.removeSuffix ".nix" file;
-              in [
-                (pkgs.writeScriptBin
-                  "disko-${nameWithoutNixSuffix}-create"
-                  (disko.lib.create (import ./disks/${file} {}))
-                )
-                (pkgs.writeScriptBin
-                  "disko-${nameWithoutNixSuffix}-mount"
-                  (disko.lib.mount (import ./disks/${file} {}))
-                )
-              ]
-            ) files) ++
 
           # Quick script to quickly download my dotfiles
           # TODO: update this when we actually put my real system here
@@ -82,12 +53,6 @@
 
       # Minimal testing machine
       argon = [
-        # Disk partitions
-        # Use lib.mkForce so that the disko config overrides the
-        # definitions from nixos-generators
-        disko.nixosModules.disko
-        (disko.lib.config (import ./disks/argon.nix {}))
-
         ({ pkgs, ... }: {
           # Bootloader stuff
           boot.loader.grub = {
