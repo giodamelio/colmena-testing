@@ -124,7 +124,7 @@
         modules = self.moduleLists.installer;
       };
 
-      installer = pkgs.callPackage ./packages/installer.nix { };
+      installer = pkgs.callPackage ./packages/installer { };
     };
   };
 }
