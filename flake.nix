@@ -6,9 +6,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs.url = "github:serokell/deploy-rs";
+    janet-nix = {
+      url = "github:turnerdev/janet-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, deploy-rs } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators, deploy-rs, janet-nix } @ inputs: let
     lib = nixpkgs.lib;
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
   in {
@@ -125,6 +129,24 @@
       };
 
       installer = pkgs.callPackage ./packages/installer { };
+
+      judge = janet-nix.packages.x86_64-linux.mkJanet {
+        name = "judge";
+        # TODO: fix when judge has a lockfile or janet-nix is updated
+        # src = pkgs.fetchFromGitHub {
+        #   owner = "ianthehenry";
+        #   repo = "judge";
+        #   rev = "v2.4.0";
+        #   sha256 = "sha256-ef2ol4k36tRCDyOdvBXu38t2U3baMRBM4b+eWOikW7w=";
+        # };
+        src = pkgs.fetchFromGitHub {
+          owner = "giodamelio";
+          repo = "judge";
+          rev = "add-lockfile";
+          sha256 = "sha256-xgrLyYKQHAwnEanPxlrDNyIHHX16YEMAKyzK3F8lA3A=";
+        };
+        entry = "./src/judge";
+      };
     };
   };
 }
