@@ -121,6 +121,23 @@
       };
     };
 
+    devShells.x86_64-linux.default = pkgs.mkShell {
+      buildInputs = with pkgs; [
+        # Janet Script Development
+        janet
+        jpm
+        gcc
+        pkg-config
+
+        # Prepackaged Janet Libraries
+        self.packages.x86_64-linux.janet-lib
+      ];
+
+      shellHook = ''
+        export JANET_PATH=${self.packages.x86_64-linux.janet-lib}
+      '';
+    };
+
     packages.x86_64-linux = {
       isoInstaller = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
@@ -129,23 +146,18 @@
       };
 
       installer = pkgs.callPackage ./packages/installer { };
+      janet-judge = pkgs.callPackage ./packages/judge.nix { };
 
-      judge = janet-nix.packages.x86_64-linux.mkJanet {
-        name = "judge";
-        # TODO: fix when judge has a lockfile or janet-nix is updated
-        # src = pkgs.fetchFromGitHub {
-        #   owner = "ianthehenry";
-        #   repo = "judge";
-        #   rev = "v2.4.0";
-        #   sha256 = "sha256-ef2ol4k36tRCDyOdvBXu38t2U3baMRBM4b+eWOikW7w=";
-        # };
-        src = pkgs.fetchFromGitHub {
-          owner = "giodamelio";
-          repo = "judge";
-          rev = "add-lockfile";
-          sha256 = "sha256-xgrLyYKQHAwnEanPxlrDNyIHHX16YEMAKyzK3F8lA3A=";
-        };
-        entry = "./src/judge";
+      # Janet packages
+      janet-sh = pkgs.callPackage ./packages/janet-sh.nix { };
+      janet-posix-spawn = pkgs.callPackage ./packages/janet-posix-spawn.nix { };
+      # One meta package containing all the previous packages
+      janet-lib = pkgs.symlinkJoin {
+        name = "janet-lib";
+        paths = with self.packages.x86_64-linux; [
+          janet-sh
+          janet-posix-spawn
+        ];
       };
     };
   };
