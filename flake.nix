@@ -137,7 +137,7 @@
         modules = self.moduleLists.installer;
       };
 
-      installer = pkgs.callPackage ./packages/installer { };
+      installatore = installatore.packages.x86_64-linux.installatore;
     };
   };
 }
