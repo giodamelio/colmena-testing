@@ -10,9 +10,13 @@
       url = "github:turnerdev/janet-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-installer = {
+      url = "path:packages/installer";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, deploy-rs, janet-nix } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators, deploy-rs, janet-nix, nixos-installer } @ inputs: let
     lib = nixpkgs.lib;
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
   in {
@@ -131,6 +135,7 @@
 
         # Prepackaged Janet Libraries
         self.packages.x86_64-linux.janet-lib
+        nixos-installer.packages.x86_64-linux.nixos-installer
       ];
 
       shellHook = ''
