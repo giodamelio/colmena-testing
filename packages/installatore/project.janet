@@ -1,10 +1,10 @@
 (declare-project
-  :name "nixos-installer"
+  :name "installatore"
   :description ```Barebones NixOS installer```
   :version "0.0.0"
   :dependencies ["spork"])
 
 (declare-executable
-  :name "nixos-installer"
+  :name "installatore"
   :entry "src/init.janet"
   :install true)

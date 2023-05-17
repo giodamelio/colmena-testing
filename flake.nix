@@ -6,13 +6,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs.url = "github:serokell/deploy-rs";
-    nixos-installer = {
-      url = "path:packages/installer";
+    installatore = {
+      url = "path:packages/installatore";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, deploy-rs, nixos-installer } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators, deploy-rs, installatore } @ inputs: let
     lib = nixpkgs.lib;
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
   in {
@@ -30,7 +30,7 @@
             pkgs.fd
 
             # Installer script
-            nixos-installer.packages.x86_64-linux.nixos-installer
+            installatore.packages.x86_64-linux.installatore
           ] ++
 
           # Quick script to quickly download my dotfiles
@@ -126,7 +126,7 @@
 
     devShells.x86_64-linux.default = pkgs.mkShell {
       buildInputs = [
-        nixos-installer.packages.x86_64-linux.nixos-installer
+        installatore.packages.x86_64-linux.installatore
       ];
     };
 

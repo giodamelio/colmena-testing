@@ -36,10 +36,28 @@
         "type": "github"
       }
     },
+    "installatore": {
+      "inputs": {
+        "janet-nix": "janet-nix",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1,
+        "narHash": "sha256-za0pSdFJOGA/V9v9WPkztUaJLHnTuxDKRZNFNLXQPPM=",
+        "path": "packages/installatore",
+        "type": "path"
+      },
+      "original": {
+        "path": "packages/installatore",
+        "type": "path"
+      }
+    },
     "janet-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixos-installer",
+          "installatore",
           "nixpkgs"
         ]
       },
@@ -93,24 +111,6 @@
         "type": "github"
       }
     },
-    "nixos-installer": {
-      "inputs": {
-        "janet-nix": "janet-nix",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-EspnDpBdUc19xzGnWIRnqM1CMZ3TfN2AYJiTpn8WoVI=",
-        "path": "packages/installer",
-        "type": "path"
-      },
-      "original": {
-        "path": "packages/installer",
-        "type": "path"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1671417167,
@@ -146,8 +146,8 @@
     "root": {
       "inputs": {
         "deploy-rs": "deploy-rs",
+        "installatore": "installatore",
         "nixos-generators": "nixos-generators",
-        "nixos-installer": "nixos-installer",
         "nixpkgs": "nixpkgs_2"
       }
     },

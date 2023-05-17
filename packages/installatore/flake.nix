@@ -32,8 +32,8 @@
       };
 
       packages = forAllSystems (system: {
-        nixos-installer = janet-nix.packages.${system}.mkJanet {
-          name = "nixos-installer";
+        installatore = janet-nix.packages.${system}.mkJanet {
+          name = "installatore";
           version = "0.0.1";
           src = ./.;
           entry = ./src/init.janet;
@@ -41,7 +41,7 @@
       });
 
       defaultPackage =
-        forAllSystems (system: self.packages.${system}.nixos-installer);
+        forAllSystems (system: self.packages.${system}.installatore);
 
       devShell = forAllSystems (system:
         with nixpkgsFor.${system};
