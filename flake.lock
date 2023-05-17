@@ -39,26 +39,6 @@
     "janet-nix": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1680847051,
-        "narHash": "sha256-FtQJIuNwqIkXK5SKcwjWuIMAFJa6+93u85ssrUtujxs=",
-        "owner": "turnerdev",
-        "repo": "janet-nix",
-        "rev": "1a77edb431c1da56a133d6b30ee3a91bc79fdd52",
-        "type": "github"
-      },
-      "original": {
-        "owner": "turnerdev",
-        "repo": "janet-nix",
-        "type": "github"
-      }
-    },
-    "janet-nix_2": {
-      "inputs": {
-        "nixpkgs": [
           "nixos-installer",
           "nixpkgs"
         ]
@@ -115,7 +95,7 @@
     },
     "nixos-installer": {
       "inputs": {
-        "janet-nix": "janet-nix_2",
+        "janet-nix": "janet-nix",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -166,7 +146,6 @@
     "root": {
       "inputs": {
         "deploy-rs": "deploy-rs",
-        "janet-nix": "janet-nix",
         "nixos-generators": "nixos-generators",
         "nixos-installer": "nixos-installer",
         "nixpkgs": "nixpkgs_2"

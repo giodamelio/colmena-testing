@@ -6,17 +6,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs.url = "github:serokell/deploy-rs";
-    janet-nix = {
-      url = "github:turnerdev/janet-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-installer = {
       url = "path:packages/installer";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, deploy-rs, janet-nix, nixos-installer } @ inputs: let
+  outputs = { self, nixpkgs, nixos-generators, deploy-rs, nixos-installer } @ inputs: let
     lib = nixpkgs.lib;
     pkgs = nixpkgs.legacyPackages.x86_64-linux;
   in {
@@ -32,6 +28,9 @@
             pkgs.git
             pkgs.ripgrep
             pkgs.fd
+
+            # Installer script
+            nixos-installer.packages.x86_64-linux.nixos-installer
           ] ++
 
           # Quick script to quickly download my dotfiles
@@ -126,21 +125,9 @@
     };
 
     devShells.x86_64-linux.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        # Janet Script Development
-        janet
-        jpm
-        gcc
-        pkg-config
-
-        # Prepackaged Janet Libraries
-        self.packages.x86_64-linux.janet-lib
+      buildInputs = [
         nixos-installer.packages.x86_64-linux.nixos-installer
       ];
-
-      shellHook = ''
-        export JANET_PATH=${self.packages.x86_64-linux.janet-lib}
-      '';
     };
 
     packages.x86_64-linux = {
@@ -151,23 +138,6 @@
       };
 
       installer = pkgs.callPackage ./packages/installer { };
-      judge = pkgs.callPackage ./packages/judge.nix {
-        janet-lib = self.packages.x86_64-linux.janet-lib;
-      };
-
-      # Janet packages
-      janet-sh = pkgs.callPackage ./packages/janet-sh.nix { };
-      janet-posix-spawn = pkgs.callPackage ./packages/janet-posix-spawn.nix { };
-      janet-cmd = pkgs.callPackage ./packages/janet-cmd.nix { };
-      # One meta package containing all the previous packages
-      janet-lib = pkgs.symlinkJoin {
-        name = "janet-lib";
-        paths = with self.packages.x86_64-linux; [
-          janet-sh
-          janet-posix-spawn
-          janet-cmd
-        ];
-      };
     };
   };
 }
