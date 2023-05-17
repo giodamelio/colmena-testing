@@ -146,17 +146,21 @@
       };
 
       installer = pkgs.callPackage ./packages/installer { };
-      janet-judge = pkgs.callPackage ./packages/judge.nix { };
+      judge = pkgs.callPackage ./packages/judge.nix {
+        janet-lib = self.packages.x86_64-linux.janet-lib;
+      };
 
       # Janet packages
       janet-sh = pkgs.callPackage ./packages/janet-sh.nix { };
       janet-posix-spawn = pkgs.callPackage ./packages/janet-posix-spawn.nix { };
+      janet-cmd = pkgs.callPackage ./packages/janet-cmd.nix { };
       # One meta package containing all the previous packages
       janet-lib = pkgs.symlinkJoin {
         name = "janet-lib";
         paths = with self.packages.x86_64-linux; [
           janet-sh
           janet-posix-spawn
+          janet-cmd
         ];
       };
     };

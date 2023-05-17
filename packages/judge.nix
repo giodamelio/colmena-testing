@@ -1,44 +1,34 @@
-{ stdenv, pkgs, janet, jpm }:
+{ stdenv, pkgs, janet, jpm, lndir, tree, janet-lib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "judge";
-  # src = pkgs.fetchFromGitHub {
-  #   owner = "ianthehenry";
-  #   repo = "judge";
-  #   rev = "v2.4.0";
-  #   sha256 = "sha256-ef2ol4k36tRCDyOdvBXu38t2U3baMRBM4b+eWOikW7w=";
-  # };
   src = pkgs.fetchFromGitHub {
-    owner = "giodamelio";
+    owner = "ianthehenry";
     repo = "judge";
-    rev = "add-lockfile";
-    sha256 = "sha256-mJnzTcs5ux2FHGINnmz0YGkZsZFtOL+ICSl2B9+mTLA=";
+    rev = "v2.4.0";
+    sha256 = "ef2ol4k36tRCDyOdvBXu38t2U3baMRBM4b+eWOikW7w=";
   };
 
-  buildInputs = [ janet jpm ];
+  buildInputs = [ janet jpm tree ];
+
+  modules = pkgs.runCommand "modules" { src = src; } ''
+    mkdir -p $out/lib/judge
+    # Link passes in modules
+    ${lndir}/bin/lndir ${janet-lib}/lib $out/lib/
+    # Link Judge modules
+    ${lndir}/bin/lndir $src/src/ $out/lib/judge/
+  '';
 
   buildPhase = ''
-    export JANET_PATH="$PWD/.jpm"
-    export JANET_TREE="$JANET_PATH/jpm_tree"
-    export JANET_LIBPATH="${pkgs.janet}/lib"
-    export JANET_HEADERPATH="${pkgs.janet}/include/janet"
-    export JANET_BUILDPATH="$JANET_PATH/build"
-    export PATH="$PATH:$JANET_TREE/bin"
-    mkdir -p "$JANET_TREE"
-    mkdir -p "$JANET_BUILDPATH"
-    mkdir -p "$PWD/.pkgs"
-
-    jpm -l deps
-    jpm -l quickbin ./src/judge judge
-    jpm help
-    echo "After"
-    ls -l
+    export JANET_MODPATH="${modules}/lib"
+    export JANET_HEADERPATH="${janet}/include/janet"
+    export JANET_LIBPATH="${janet}/lib"
+    jpm quickbin ./src/judge judge
   '';
 
   installPhase = ''
-    ls -l
     mkdir -p $out/bin
-    cp build/$name $out/bin/
+    cp $name $out/bin/
     chmod +x $out/bin/$name
   '';
 }

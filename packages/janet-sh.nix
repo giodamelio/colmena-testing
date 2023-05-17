@@ -35,8 +35,8 @@ stdenv.mkDerivation {
     export JANET_BUILDPATH="$JANET_PATH/build"
     export PATH="$PATH:$JANET_TREE/bin"
 
-    mkdir -p $out/
-    mv $JANET_BUILDPATH/* $out/
-    mv sh.janet $out/
+    mkdir -p $out/lib
+    mv $JANET_BUILDPATH/* $out/lib
+    mv sh.janet $out/lib
   '';
 }

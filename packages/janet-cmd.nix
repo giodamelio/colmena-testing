@@ -1,12 +1,12 @@
 { stdenv, pkgs, janet, jpm }:
 
 stdenv.mkDerivation {
-  name = "janet-posix-spawn";
+  name = "janet-cmd";
   src = pkgs.fetchFromGitHub {
-    owner = "andrewchambers";
-    repo = "janet-posix-spawn";
-    rev = "d73057161a8d10f27b20e69f0c1e2ceb3e145f97";
-    sha256 = "kiEPQKiAZ+zPY7cBEhTYrdIVVu9353Mpeq3YbB27u8w=";
+    owner = "ianthehenry";
+    repo = "cmd";
+    rev = "v1.0.4";
+    sha256 = "vJLayInIUi4oM8ZqPiNKFCulDiILn4StpoHZcG3/QQ8=";
   };
 
   buildInputs = [ janet jpm ];
@@ -35,8 +35,7 @@ stdenv.mkDerivation {
     export JANET_BUILDPATH="$JANET_PATH/build"
     export PATH="$PATH:$JANET_TREE/bin"
 
-    mkdir -p $out/lib
-    mv $JANET_BUILDPATH/* $out/lib
-    mv posix-spawn.janet $out/lib
+    mkdir -p $out/lib/cmd/
+    mv src/*.janet $out/lib/cmd/
   '';
 }
