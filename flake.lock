@@ -44,14 +44,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-za0pSdFJOGA/V9v9WPkztUaJLHnTuxDKRZNFNLXQPPM=",
-        "path": "packages/installatore",
-        "type": "path"
+        "lastModified": 1684363035,
+        "narHash": "sha256-apRHK6LjCT27eCHqGzV3pY3dp9x6WyG4sb3ZWaORJNw=",
+        "owner": "giodamelio",
+        "repo": "installatore",
+        "rev": "60d6a7ef77eef10aa92dc834253f30518c6f5386",
+        "type": "github"
       },
       "original": {
-        "path": "packages/installatore",
-        "type": "path"
+        "owner": "giodamelio",
+        "repo": "installatore",
+        "type": "github"
       }
     },
     "janet-nix": {

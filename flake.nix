@@ -7,7 +7,7 @@
     };
     deploy-rs.url = "github:serokell/deploy-rs";
     installatore = {
-      url = "path:packages/installatore";
+      url = "github:giodamelio/installatore";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
